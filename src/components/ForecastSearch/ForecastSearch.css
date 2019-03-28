@@ -1,0 +1,54 @@
+.forecast-cards-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    align-items: flex-start ;
+    height: 800px;
+  }
+  
+  .forecast-card-item{
+    max-width: 500px;
+    min-width: 500px;
+    flex-grow : 1;
+    flex-shrink:1;
+    height: 100%
+  }
+
+  .forecast-card-time-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    align-items: flex-start ;
+    
+  }
+  
+  .forecast-card-time-item{
+    flex-grow : 1;
+    flex-shrink:1;
+  }
+
+  #chart {
+    /* background: #fff; */
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  #chart .c3-line-data2 {
+    stroke-width: 1px;
+  }
+
+
+  .bx--structured-list {
+    font-family: "ibm-plex-sans", Helvetica Neue, Arial, sans-serif;
+    display: table;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    min-width: 255px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 2rem;
+    background-color: transparent;
+}

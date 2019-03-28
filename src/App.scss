@@ -1,0 +1,108 @@
+
+$css--plex: true;
+
+
+.app {
+	margin: 0em;
+}
+
+.app-header,
+.app-main-content,
+.app-sidebar,
+.app-footer {
+    padding: 1em;
+}
+
+
+
+.app {
+	display: grid;
+	grid-template-rows: 4rem 1fr 5rem ;
+
+		grid-template-columns: auto 1fr 1fr 1fr;
+		grid-template-areas:
+			"header header header header"
+			"sidebar main main main"
+			"footer footer footer footer";
+}
+
+.app-header {
+  background-color: #152935;
+  padding: 0em;
+
+	grid-area: header;
+
+    /*  defining the header as css grid  */
+  display: grid;
+	grid-template-rows: 4rem;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-areas:
+			"branding center user"
+}
+
+.app-header-user-profile-container {
+
+/*  position in the main grid  */
+  grid-area: user;
+
+  /*  position in the main grid  */
+  display : flex ;
+  flex-direction :column;
+
+}
+
+
+.app-header-user-profile-username{
+  font-size: 12px;
+  padding-top: 14px;
+  color: #FFFFFF;
+  padding-right: 1rem;
+}
+
+.app-header-user-profile-team{
+  font-size: 12px;
+  
+}
+.app-header-user-profile-pic{
+  font-size: 12px;
+}
+
+.app-header-row-user{
+  display : flex ;
+  flex-direction :row-reverse;
+  height : 1.5rem
+}
+
+.app-header-row-team{
+  display : flex ;
+   flex-direction :row-reverse;
+   height : 3rem
+}
+
+.app-header-user-profile-team{
+  font-size: 12px;
+}
+.app-header-user-profile-pic{
+  font-size: 12px;
+}
+
+
+.app-main-content {
+  margin: 1em;
+  grid-area: main;
+}
+
+.app-sidebar {
+  grid-area: sidebar;
+  padding-left: 0px;
+}
+
+.app-footer {
+
+	grid-area: footer;
+}
+
+
+.app-spacer {
+    padding : 20px ;
+}
