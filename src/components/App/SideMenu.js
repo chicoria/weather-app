@@ -43,7 +43,7 @@ class SideMenu extends Component {
 
     render() {
 
-        const menuItemStyle = {borderTop:'0.5px solid #E2DDDD', fontFamily: 'IBM Plex Sans', fontSize: '14px'};
+        
         const menuItemHeaderStyle = {borderTop:'1px solid #E2DDDD', 	borderBottom: '0.5px solid #4A90E2', fontFamily: 'IBM Plex Sans', fontSize: '14px'};
 
       return (

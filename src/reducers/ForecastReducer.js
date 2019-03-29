@@ -9,7 +9,7 @@ const initState = {
     searchForm : {
         search : ""
     },
-    searchForecastStatus : FORECAST_SEARCH_FORECAST_STATUS_INITIAL,
+    searchForecastStatus : "FORECAST_SEARCH_FORECAST_STATUS_INITIAL",
     currentWeather : {}
 }
 

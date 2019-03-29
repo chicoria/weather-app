@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import moment from 'moment';
-import { connect } from 'react-redux';
+
 import {Tile,
         StructuredListWrapper,
         StructuredListBody,
@@ -9,7 +9,7 @@ import {Tile,
         StructuredListCell
 } from 'carbon-components-react';
 import ForecastChart from './ForecastChart'
-import HumidityIcon from './icons/humidity.svg'
+
 var locale = window.navigator.userLanguage || window.navigator.language;
 moment.locale(locale); 
 

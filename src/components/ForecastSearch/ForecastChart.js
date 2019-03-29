@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import am4themes_dataviz from "@amcharts/amcharts4/themes/dataviz";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import moment from 'moment';
 
@@ -68,7 +66,7 @@ class ForecastChart extends Component {
   }
 
   getData=()=>{
-    const {date, forecast} = this.props;
+    const {forecast} = this.props;
     if(forecast!== undefined){
         return forecast.map( f =>{
             let temp  ; 
@@ -84,7 +82,6 @@ class ForecastChart extends Component {
     
   
   render() {
-    const date = this.props.date || "main";
 
     return (
       <div id={this.getChartDiv()} style={{ width: "100%", height: "150px" }}></div>

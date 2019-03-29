@@ -11,7 +11,6 @@ import {fetchForecast,fetchForecastByCityId,
         updateSearchString,searchCitiesByString,
         fetchWeatherByCityId,updateSearchForecastStatus,
         FORECAST_SEARCH_FORECAST_STATUS_SEARCHING, 
-        FORECAST_SEARCH_FORECAST_STATUS_DONE,
         FORECAST_SEARCH_FORECAST_STATUS_INITIAL
      } from '../../reducers/ForecastReducer'
 import Page from '../App/Page';
@@ -101,7 +100,7 @@ class ForecastSearch extends Component {
     
 
     filterCityName = (ob)=>{
-         const {item,itemToString,inputValue} = ob; 
+         const {item,inputValue} = ob; 
          return item.name.toLowerCase().startsWith(inputValue.toLowerCase());
     }
 

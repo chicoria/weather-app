@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux' ;
 
-import envIcon1 from './icons/MenuIcon.svg';
 import {updateSideMenuState} from '../../reducers/AppReducer'; 
 
 
