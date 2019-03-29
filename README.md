@@ -24,3 +24,12 @@ As a user interested on search for Weather forecast for a given city I should be
 It is a React-Redux app usign React Carbon Components to render forecast data for given city. The frontend code make RPC/REST API calls  through a node/express/json-server proxy to the OpenWeatherMap API. 
 
 ![image](https://user-images.githubusercontent.com/923491/55207398-b55b4280-51b8-11e9-91f5-60523e0f8947.png)
+
+
+# Major Challenges
+1. Setting the CORS to work with OpenWeatherMap API straight from client side code. 
+1. The OpenWeatherMap API uses jsonp as response format and the javascript **fetch api** does not resolve the promises
+1. Hide the API key from frontend code
+1. Avoid hit the OpenWeatherMap API for the same city within a hour
+1. Load dinamically the cities for the autocomplete functionality since the OpenWeatherMap service does not provide a API to search the cities dinamically. It just provides a json file with all cities/id (country,lon,lat) they cover in they service.
+1. Avoid to load the json file with 30K cities 
