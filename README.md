@@ -9,7 +9,7 @@
 
 
 # User Story
-As a user interested to search for Weather forecast I should be able:
+As a user interested on search for Weather forecast for a given city I should be able:
 1. Type the name of the city on the search field
 1. Get a autocomplete sugestion based on what I have typed 
 1. Select the right city even we have different cities with the same name (ex: There are two Oslo in Norway - you have differentiate using longitute and latitue (sic)).
