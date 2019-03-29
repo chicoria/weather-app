@@ -25,8 +25,8 @@ export const getForecastByCityId = (cityId) => {
  }
 
 
-export const getWeather = (city) => {
-    return fetch(apiURL + `/weather/data/2.5/weather?q=${city}&units=metric`)
+export const getWeatherByCityId = (cityId) => {
+    return fetch(apiURL + `/weather/data/2.5/weather?id=${cityId}&units=metric`)
      .then(res => res.json())
      .catch(ex => {
          console.log('parsing failed', ex)

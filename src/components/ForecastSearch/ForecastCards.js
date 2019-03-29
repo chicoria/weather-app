@@ -8,36 +8,17 @@ import {Tile,
         StructuredListRow,
         StructuredListCell
 } from 'carbon-components-react';
-import { LineGraph , BarGraph} from "carbon-addons-data-viz-react";
-import Chart from './Chart'
-
+import ForecastChart from './ForecastChart'
+import HumidityIcon from './icons/humidity.svg'
 var locale = window.navigator.userLanguage || window.navigator.language;
 moment.locale(locale); 
 
 
 export class ForecastCards extends Component {
- 
-    // state ={
-    //     forecast : {}
-    // }
-
-    // componentDidMount=()=>{
-    //     if(this.props.forecastObj !== undefined &&
-    //          this.props.forecastObj.city !== undefined){
-    //         this.setState({forecast : this.props.forecastObj}); 
-    //     }
-    // }
-
-    // componentWillReceiveProps=(nextProps)=>{
-    //     if(nextProps.forecastObj !== this.props.forecastObj){
-    //         this.setState({forecast : nextProps.forecastObj}); 
-    //     }
-    // }
-    
     
     render(){
         const forecast = this.props.forecastObj !==undefined ? this.props.forecastObj : {} ; 
-             
+        const weather = this.props.currentWeather !==undefined ? this.props.currentWeather : {} ; 
         let cards = []; 
 
         if ( forecast!== undefined 
@@ -66,20 +47,69 @@ export class ForecastCards extends Component {
     }   
 
     return (
-          <div className="bx--row">
-            <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12 forecast-cards-container">
-                {cards}
+        <div className="bx--row">
+            <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">     
+                <Tile>          
+                        <div className="bx--row">
+                            <div className="bx--col-xs-3 bx--col-md-3 bx--col-lg-3">                        
+                                <span className="bx--type-alpha" style={{fontWeight:600}}>{forecast.city.name}</span>
+                                <span className="bx--type-alpha" >, {forecast.city.country}</span><br/>
+                                <span className="bx--type-caption" >(lon:{forecast.city.coord.lon} | lat:{forecast.city.coord.lat})</span>
+                            </div>
+
+                            <div className="bx--col-xs-9 bx--col-md-9 bx--col-lg-9 ">
+                                <div className="bx--row">
+                                    <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                        <span className="bx--type-legal" >temperature</span><br/>
+                                        <span className="bx--type-alpha" >{weather.main.temp} ºC</span><br/>                                            
+                                        <span className="bx--type-caption">min:</span>
+                                        <span className="bx--type-omega"> {weather.main.temp_min}ºC</span><br/>
+                                        <span className="bx--type-caption">  max:</span>
+                                        <span className="bx--type-omega"> {weather.main.temp_max}ºC</span>
+                                     </div>   
+                                     <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                        <span className="bx--type-legal" >humidity</span><br/>
+                                        <span className="bx--type-alpha">{weather.main.humidity}%</span><br/>
+                                    </div>                                                                    
+                                    <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                            <span className="bx--type-legal" >weather</span><br/>
+                                            <span className="bx--type-alpha" >{weather.weather[0].main} </span><br/>
+                                            <span className="bx--type-caption" >{weather.weather[0].description}</span>
+                                    </div> 
+                                    <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                         <span className="bx--type-legal" >wind</span><br/>
+                                        <span className="bx--type-alpha" >{weather.wind.speed} Km/h </span><br/>
+                                        <span className="bx--type-caption" >{weather.wind.deg}º</span>
+                                    </div>  
+                                    <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                        <span className="bx--type-legal" >sunset</span><br/>
+                                        <span className="bx--type-alpha" >{moment.unix(weather.sys.sunrise).format("HH:mm:ss")}</span>
+                                    </div>   
+                                    
+                                    <div className="bx--col-xs-2 bx--col-md-2 bx--col-lg-2">
+                                        <span className="bx--type-legal" >sunset</span><br/>
+                                        <span className="bx--type-alpha" >{moment.unix(weather.sys.sunset).format("HH:mm:ss")}</span>
+                                    </div>                                     
+                                                       
+                                </div>     
+                             </div>                            
+
+                      
+                    </div> 
+                </Tile>                     
+                <div className="bx--row">
+                    <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12 forecast-cards-container">
+                        {cards}
+                    </div>
+                </div>                              
             </div>
-         </div>
+         </div>        
+
       );
     }
   }
 
-  export default connect(
-    (state) => ({
-      forecast : state.forecast.forecastData,
-    }),{}
-  )(ForecastCards);
+  export default ForecastCards;
   
 
 export class ForecastCard extends Component {
@@ -100,7 +130,7 @@ export class ForecastCard extends Component {
                 <span className="bx--type-gamma">{moment.unix(date).format("L")}</span>
             </div>
             <div className="app-spacer" />
-            <Chart date={moment.unix(date).format("L")} forecast={forecastList} />
+            <ForecastChart date={moment.unix(date).format("L")} forecast={forecastList} />
             <div className="app-spacer" />
              <ForecastCardTimeSection forecastCardTemperatureOnTimeList={forecastCardTemperatureOnTimeList}/>
                    

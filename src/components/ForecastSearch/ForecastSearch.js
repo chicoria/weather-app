@@ -3,20 +3,24 @@ import { connect } from 'react-redux';
 import debounce from 'lodash/debounce'; 
 import moment from 'moment';
 import { TextArea,
-          ComboBox
+          ComboBox,
+          Loading
         } from 'carbon-components-react';
 
-import {fetchForecast,fetchForecastByCityId,updateSearchString,searchCitiesByString
+import {fetchForecast,fetchForecastByCityId,
+        updateSearchString,searchCitiesByString,
+        fetchWeatherByCityId,updateSearchForecastStatus,
+        FORECAST_SEARCH_FORECAST_STATUS_SEARCHING, 
+        FORECAST_SEARCH_FORECAST_STATUS_DONE,
+        FORECAST_SEARCH_FORECAST_STATUS_INITIAL
      } from '../../reducers/ForecastReducer'
 import Page from '../App/Page';
-
 import './ForecastSearch.css';
-import { ForecastCards } from './ForecastCards'
-import Chart from './Chart'
+import { ForecastCards } from './ForecastCards';
+import ForecastChart from './ForecastChart'; 
 
 var locale = window.navigator.userLanguage || window.navigator.language;
 moment.locale(locale); 
-
 
 
 class ForecastSearch extends Component {
@@ -36,24 +40,25 @@ class ForecastSearch extends Component {
     }
 
     componentWillReceiveProps = (nextProps) => {
-
     }
 
 
     onChangeSearch= debounce(search=>{
-
+        this.props.updateSearchForecastStatus(FORECAST_SEARCH_FORECAST_STATUS_INITIAL);
         if( search !== this.state.previousSearch){
             console.log("query:", search);
             this.props.searchCitiesByString(search);
             this.setState({previousSearch:search});
         }
-
+    
     }, 1300);
 
     onSelectedCity=(selectedCity)=>{     
+
         if(!!selectedCity){
             this.props.fetchForecastByCityId(selectedCity.id);
-            this.setState({isSearchSelectedItem: true})
+            this.props.fetchWeatherByCityId(selectedCity.id);
+            this.props.updateSearchForecastStatus(FORECAST_SEARCH_FORECAST_STATUS_SEARCHING);
         }
         
     }
@@ -75,25 +80,34 @@ class ForecastSearch extends Component {
 
   getForecastCards=()=>{
     let forecast = this.props.forecast.forecastData; 
+
     if ( forecast !== undefined 
         && forecast.list!== undefined ) {
-    
-         return <ForecastCards forecastObj={forecast} />; 
+       
+        let weather = this.props.weather ; 
+         return <ForecastCards forecastObj={forecast} currentWeather={weather}/>; 
     }
+  }
+  getForecastChart=()=>{
+      if(this.props.forecast.forecastData !== undefined &&
+        this.props.forecast.forecastData.list !==undefined){
+        return <ForecastChart  forecast={this.props.forecast.forecastData.list.map( f =>{
+            return { date: moment.unix(f.dt).toDate(), temp: f.main.temp }; 
+        })} />  
+      }
+
   }
 
     
 
     filterCityName = (ob)=>{
          const {item,itemToString,inputValue} = ob; 
-        //  console.log("item", item); 
-        //  console.log("itemToString", itemToString); 
-        //  console.log("inputValue", inputValue); 
          return item.name.toLowerCase().startsWith(inputValue.toLowerCase());
     }
 
+
     render() {
-        
+
         return (
         <Page {...this.props} >
 
@@ -103,37 +117,35 @@ class ForecastSearch extends Component {
             {/*   Page Title  */}
             <div className="bx--row" >
             
-                <div className="bx--col-xs-4 bx--col-md-4 bx--col-lg-4">
-                
+                <div className="bx--col-xs-auto bx--col-md-3 bx--col-lg-3">                
                 </div>
                 
-                <div className="bx--col-xs-4 bx--col-md-4 bx--col-lg-4" style={{textAlign: 'center'}}>
-                <span className="bx--type-beta">Search for the Weather Forecast</span>
+                <div className="bx--col-xs-auto bx--col-md-6 bx--col-lg-6" style={{textAlign: 'center'}}>
+                <span className="bx--type-alpha">Search for the Weather Forecast</span>
                 </div>
                 
-                <div className="bx--col-xs-4 bx--col-md-4 bx--col-lg-4">
-                
+                <div className="bx--col-xs-auto bx--col-md-3 bx--col-lg-3">                
                 </div>  
                                 
             </div>
 
-            {/*   space for notification info/description text */}
+
+                {/*   space for notification info/description text */}
             <div className="bx--row">
                 <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
-                <div className="app-spacer" />
+                    <div className="app-spacer" />
                 </div>
             </div>
 
 
-
-                {/*  Title Text Input  */}
-                <div className="bx--row">
-                    <div className="bx--col-xs-3 bx--col-md-3 bx--col-lg-3">              
-                </div>
+            {/*  Title Text Input  */}
+            <div className="bx--row">
+                <div className="bx--col-xs-auto bx--col-md-3 bx--col-lg-3">              
+            </div>
                             
-                <div className="bx--col-xs-6 bx--col-md-6 bx--col-lg-6">
-                    <div style={{ width: '100%' }}>
-                    <ComboBox                        
+            <div className="bx--col-xs-auto bx--col-md-6 bx--col-lg-6">
+                <div style={{ width: '100%' }}>
+                    <ComboBox                                                
                         items={this.props.filteredCities}
                         itemToString={item =>
                         item ? `${item.name}, ${item.country} - (lon:${item.coord.lon} - lat:${item.coord.lat})` : ''
@@ -142,46 +154,44 @@ class ForecastSearch extends Component {
                         onInputChange={ (text) => this.onChangeSearch(text)}
                         onChange={ob => this.onSelectedCity(ob.selectedItem)}
                         placeholder="Oslo"
-                    />
-                </div>
-                </div>
-                <div className="bx--col-xs-3 bx--col-md-3 bx--col-lg-3">
-                </div>  
-                </div>
-
-            <div className="bx--row">
-                <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
-                <div className="app-spacer" />                   
-                </div>
-                
-            </div>            
-
-            {this.getForecastCards()}
-
-            {/*   space for notification info/description text */}
-            <div className="bx--row">
-                <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
-                    <div className="app-spacer" />
+                    />                        
                 </div>
             </div>
+    
+            <div className="bx--col-xs-auto bx--col-md-3 bx--col-lg-3">
+            </div>  
+        </div>            
 
-            {/*   space  */}
-            <div className="bx--row" style={{display:'none'}}>
-                <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
-                <div className="spaceBetweenFormTitleAndFormDescription" />
-                < TextArea 
-                labelText="Result"
-                value={this.printForecast()}/>
-                <div className="spaceBetweenFormTitleAndFormDescription" />
-                </div>
-            </div>   
+        <div className="bx--row">
+            <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
+            <div className="app-spacer" />                   
+            </div>                
+        </div>            
+
+        <Loading 
+            active={this.props.searchForecastStatus === FORECAST_SEARCH_FORECAST_STATUS_SEARCHING}
+            withOverlay={true} />
+        
+        {this.getForecastCards()}
+
+        {/*   space for notification info/description text */}
+        <div className="bx--row">
+            <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
+                <div className="app-spacer" />
+            </div>
+        </div>
+
+        {/*   space  */}
+        <div className="bx--row" style={{display:'none'}}>
+            <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
+            <div className="spaceBetweenFormTitleAndFormDescription" />
+            < TextArea 
+            labelText="Result"
+            value={this.printForecast()}/>
+            <div className="spaceBetweenFormTitleAndFormDescription" />
+            </div>
+        </div>   
             
-            <div className="bx--row">
-                <div className="bx--col-xs-12 bx--col-md-12 bx--col-lg-12">
-                    <div className="app-spacer" />
-           
-                </div>
-             </div>
                                 
             </div> 
         </Page>
@@ -193,9 +203,13 @@ export default connect(
   (state) => ({
     searchForm: state.forecast.searchForm,
     forecast : state.forecast,
-    filteredCities : state.forecast.filteredCities
+    weather : state.forecast.currentWeather,
+    filteredCities : state.forecast.filteredCities,
+    searchForecastStatus : state.forecast.searchForecastStatus,
   }),
   {
-    fetchForecast,fetchForecastByCityId,updateSearchString,searchCitiesByString
+    fetchForecast,fetchForecastByCityId,
+    updateSearchString,searchCitiesByString,
+    fetchWeatherByCityId,updateSearchForecastStatus
   }
 )(ForecastSearch);
